@@ -1,0 +1,45 @@
+{
+  "name": "infot",
+  "version": "0.1",
+  "description": "Bot para recibir notificaciones de la plataforma Infoda - UdeC en telegram.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
+    "prepare": "husky install",
+    "lint": "eslint --fix . && prettier --write ."
+  },
+  "author": "Francisco Cea <hola@fcocea.dev>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "telegraf": "^4.12.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.7",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.40.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "install": "^0.13.0",
+    "lint-staged": "^13.2.2",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
+    "ts-alias": "^0.0.7",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
