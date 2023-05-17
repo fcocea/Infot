@@ -1,7 +1,4 @@
 {
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  },
   "compilerOptions": {
     "module": "CommonJS",
     "moduleResolution": "node",
