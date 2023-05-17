@@ -1,5 +1,5 @@
 import { Telegraf, Context } from 'telegraf';
-import { Update } from 'telegraf/typings/core/types/typegram';
+import { Update } from '@/typegram';
 import { Config, Log } from '@/utils';
 import { StartCommand } from '@/commands';
 

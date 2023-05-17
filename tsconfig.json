@@ -7,6 +7,9 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
+      "@/typegram": [
+        "node_modules/.pnpm/telegraf@4.12.2/node_modules/telegraf/typings/core/types/typegram"
+      ],
       "@/utils/*": ["src/utils/*"],
       "@/utils": ["src/utils"],
       "@/commands/*": ["src/commands/*"],
