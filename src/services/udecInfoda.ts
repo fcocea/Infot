@@ -1,6 +1,6 @@
 import ky from 'ky';
 import * as cheerio from 'cheerio';
-
+import FormData from 'form-data';
 interface UdecProps {
   username: string;
   password: string;
@@ -74,7 +74,6 @@ export class UdecInfoda {
         body: searchParams,
       },
     );
-    console.log(infodaPost.headers.get('set-cookie'));
     this.infodaCookies = infodaPost.headers.get('set-cookie') as string;
   }
 }
