@@ -107,36 +107,21 @@ PasswordScene.on(message('reply_to_message'), async (ctx) => {
   const text = ctx.message.reply_to_message.text;
   const username = text.split(' ')[4].split('\n')[0];
   Log(`User ${username} (@${ctx.from.username}) is trying to login...`);
-  const password = ctx.message.text;
-  const udecAcces = new UdecInfoda({ username, password });
-  ctx.replyWithMarkdownV2(
+  const udecAcces = new UdecInfoda({ username, password: ctx.message.text });
+  const loadingMsg = await ctx.replyWithMarkdownV2(
     ParseMarkdown(
       `🕵️‍♂️ Un momento! me encuentro *verificando* \ntus credenciales...`,
     ),
   );
   const login = await udecAcces.login();
-  if (login) {
-    Log(`User ${username} (@${ctx.from.username}) has logged in successfully!`);
-    const messages = [
-      ` 👋 Ingreaste correctamente como: *${username}*`,
-      '',
-      ' Revisaré periódicamente si hay nuevos eventos',
-      'en la plataforma de _infoda_ y te notificaré',
-      'si es que hay alguno.',
-    ];
-    ctx.replyWithMarkdownV2(ParseMarkdown(messages.join('\n')));
-    const matricula = await udecAcces.getRegistrationNumber();
-    if (matricula !== undefined) {
-      ctx.replyWithMarkdownV2(
-        ParseMarkdown(` Tu número de matrícula es: *${matricula}*`),
-      );
-    }
-    ctx.scene.leave();
-    return;
-  }
-
-  Log(`User ${username} (@${ctx.from.username}) has failed to login!`);
-  const messages = [
+  const succesMessage = [
+    ` 👋 Ingreaste correctamente como: *${username}*`,
+    '',
+    ' Revisaré periódicamente si hay nuevos eventos',
+    'en la plataforma de _infoda_ y te notificaré',
+    'si es que hay alguno.',
+  ];
+  const errorMessage = [
     '',
     ' ⚠️ No lograste iniciar sesión, verifica',
     'que los datos ingresados sean correctos.',
@@ -147,6 +132,18 @@ PasswordScene.on(message('reply_to_message'), async (ctx) => {
     ' 👉 Para iniciar sesión nuevamente, utiliza',
     'el comando /start',
   ];
-  ctx.replyWithMarkdownV2(ParseMarkdown(messages.join('\n')));
+  await ctx.telegram.editMessageText(
+    ctx.chat.id,
+    loadingMsg.message_id,
+    undefined,
+    ParseMarkdown((login ? succesMessage : errorMessage).join('\n')),
+    { parse_mode: 'MarkdownV2' },
+  );
+  Log(
+    `User ${username} (@${ctx.from.username}) has ${
+      login ? 'logged in successfully' : 'failed to login'
+    }!`,
+  );
+  ctx.scene.leave();
 });
 PasswordScene.on('message', InterruptLogin);
