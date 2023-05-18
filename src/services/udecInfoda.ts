@@ -129,4 +129,40 @@ export class UdecInfoda {
       return undefined;
     }
   }
+
+  async getCertificate(id: number): Promise<string | undefined> {
+    if (id < 1 || id > 12) {
+      Log(`Invalid certificate id (${id}) | ${this.user}`, 'error');
+      return undefined;
+    }
+    if (!fs.existsSync('downloads')) {
+      Log('Creating downloads folder...');
+      fs.mkdirSync('downloads', { recursive: true });
+    }
+    const filename = `downloads/${this.user}-${id}.pdf`;
+    const res = got.stream(
+      `http://app4.udec.cl/infoda2/certificado/pdf/${id}`,
+      {
+        headers: {
+          cookie: this.cookies,
+        },
+      },
+    );
+    res.pipe(fs.createWriteStream(filename));
+    const onFinish = new Promise((resolve, reject) => {
+      res.on('redirect', reject);
+      res.on('end', resolve);
+    });
+    try {
+      await onFinish;
+      Log(`Certificate (${id}) downloaded successfully! | ${this.user}`);
+    } catch (error) {
+      Log(`Error downloading certificate (${id}) | ${this.user}`, 'error');
+      if (fs.existsSync(filename)) {
+        fs.unlinkSync(filename);
+      }
+      return undefined;
+    }
+    return filename;
+  }
 }

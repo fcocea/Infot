@@ -90,6 +90,7 @@ LoginScene.on(message('reply_to_message'), (ctx) => {
     `  Estas intentando acceder como: *${text}*`,
     '',
     ' 👉 Ingresa la contraseña de tu cuenta - UdeC',
+    ' *No* te preocupes, *nunca* será almacenada.',
     ...CancelFooter,
   ];
   ctx.replyWithMarkdownV2(ParseMarkdown(msg.join('\n')), Markup.forceReply());
@@ -124,6 +125,12 @@ PasswordScene.on(message('reply_to_message'), async (ctx) => {
       'si es que hay alguno.',
     ];
     ctx.replyWithMarkdownV2(ParseMarkdown(messages.join('\n')));
+    const matricula = await udecAcces.getRegistrationNumber();
+    if (matricula !== undefined) {
+      ctx.replyWithMarkdownV2(
+        ParseMarkdown(` Tu número de matrícula es: *${matricula}*`),
+      );
+    }
     ctx.scene.leave();
     return;
   }
