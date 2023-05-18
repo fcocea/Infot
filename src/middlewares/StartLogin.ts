@@ -97,7 +97,7 @@ LoginScene.on(message('reply_to_message'), (ctx) => {
 });
 LoginScene.on('message', InterruptLogin);
 
-PasswordScene.on(message('reply_to_message'), (ctx) => {
+PasswordScene.on(message('reply_to_message'), async (ctx) => {
   if (!('text' in ctx.message.reply_to_message && 'text' in ctx.message))
     return;
   const id = ctx.message.reply_to_message.message_id;
@@ -108,10 +108,12 @@ PasswordScene.on(message('reply_to_message'), (ctx) => {
   Log(`User ${username} (@${ctx.from.username}) is trying to login...`);
   const password = ctx.message.text;
   const udecAcces = new UdecInfoda({ username, password });
-  let login = false;
-  (async () => {
-    login = await udecAcces.login();
-  })();
+  ctx.replyWithMarkdownV2(
+    ParseMarkdown(
+      `🕵️‍♂️ Un momento! me encuentro *verificando* \ntus credenciales...`,
+    ),
+  );
+  const login = await udecAcces.login();
   if (login) {
     Log(`User ${username} (@${ctx.from.username}) has logged in successfully!`);
     const messages = [

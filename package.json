@@ -16,8 +16,9 @@
   "dependencies": {
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^16.0.3",
-    "form-data": "^4.0.0",
-    "ky": "^0.33.3",
+    "form-data-encoder": "^2.1.4",
+    "formdata-node": "^5.0.0",
+    "got": "^12.6.0",
     "telegraf": "^4.12.2"
   },
   "devDependencies": {
