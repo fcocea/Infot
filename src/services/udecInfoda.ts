@@ -31,7 +31,7 @@ export class UdecInfoda {
 
   public async login(): Promise<boolean> {
     const loginRes = await ky.post('https://alumnos.udec.cl/', {
-      body: this.formData,
+      body: this.formData as any,
       redirect: 'manual',
       throwHttpErrors: false,
     });
