@@ -14,7 +14,9 @@
   "author": "Francisco Cea <hola@fcocea.dev>",
   "license": "MIT",
   "dependencies": {
+    "cheerio": "1.0.0-rc.12",
     "dotenv": "^16.0.3",
+    "ky": "^0.33.3",
     "telegraf": "^4.12.2"
   },
   "devDependencies": {

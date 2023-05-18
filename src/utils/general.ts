@@ -7,6 +7,6 @@ export const Log = (message: string, type: LogType = 'info'): void => {
 };
 
 export const ParseMarkdown = (text: string): string => {
-  const reservedCharactersMarkdown = /[\\`_{}[\]()#+\-.!]/g;
+  const reservedCharactersMarkdown = /[\\`{}#+\-.!]/g;
   return text.replace(reservedCharactersMarkdown, '\\$&');
 };

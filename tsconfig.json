@@ -12,7 +12,9 @@
       "@/commands/*": ["src/commands/*"],
       "@/commands": ["src/commands"],
       "@/middlewares": ["src/middlewares"],
-      "@/middlewares/*": ["src/middlewares/*"]
+      "@/middlewares/*": ["src/middlewares/*"],
+      "@/services": ["src/services"],
+      "@/services/*": ["src/services/*"]
     },
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,

@@ -1,6 +1,7 @@
 import { Context, Markup, Scenes } from 'telegraf';
 import { Log, ParseMarkdown } from '@/utils';
 import { message } from 'telegraf/filters';
+import { UdecInfoda } from '@/services';
 
 export const LoginScene = new Scenes.BaseScene<Scenes.SceneContext>(
   'usernameLogin',
@@ -42,6 +43,23 @@ const CancelLogin = (context: Context) => {
   context.replyWithMarkdownV2(messages.join('\n'));
 };
 
+const InterruptLogin = (
+  context: Scenes.SceneContext<Scenes.SceneSessionData>,
+) => {
+  context.deleteMessage();
+  const msg = [
+    ' ❌ Inicio de sesión *cancelado*!',
+    '',
+    ' ⚠️ Debes responder al mensaje que te envié',
+    'para iniciar sesión.',
+    '',
+    ' 👉 Para iniciar sesión nuevamente, utiliza',
+    'el comando /start',
+  ];
+  context.replyWithMarkdownV2(ParseMarkdown(msg.join('\n')));
+  context.scene.leave();
+};
+
 LoginScene.enter(StartLogin);
 
 LoginScene.command('cancelar', (ctx) => {
@@ -77,6 +95,7 @@ LoginScene.on(message('reply_to_message'), (ctx) => {
   ctx.replyWithMarkdownV2(ParseMarkdown(msg.join('\n')), Markup.forceReply());
   ctx.scene.enter('passwordLogin');
 });
+LoginScene.on('message', InterruptLogin);
 
 PasswordScene.on(message('reply_to_message'), (ctx) => {
   if (!('text' in ctx.message.reply_to_message && 'text' in ctx.message))
@@ -88,5 +107,37 @@ PasswordScene.on(message('reply_to_message'), (ctx) => {
   const username = text.split(' ')[4].split('\n')[0];
   Log(`User ${username} (@${ctx.from.username}) is trying to login...`);
   const password = ctx.message.text;
-  ctx.scene.leave();
+  const udecAcces = new UdecInfoda({ username, password });
+  let login = false;
+  (async () => {
+    login = await udecAcces.login();
+  })();
+  if (login) {
+    Log(`User ${username} (@${ctx.from.username}) has logged in successfully!`);
+    const messages = [
+      ` 👋 Ingreaste correctamente como: *${username}*`,
+      '',
+      ' Revisaré periódicamente si hay nuevos eventos',
+      'en la plataforma de _infoda_ y te notificaré',
+      'si es que hay alguno.',
+    ];
+    ctx.replyWithMarkdownV2(ParseMarkdown(messages.join('\n')));
+    ctx.scene.leave();
+    return;
+  }
+
+  Log(`User ${username} (@${ctx.from.username}) has failed to login!`);
+  const messages = [
+    '',
+    ' ⚠️ No lograste iniciar sesión, verifica',
+    'que los datos ingresados sean correctos.',
+    '',
+    ' Si el problema persiste, envía un mensaje',
+    'a @fcocea',
+    '',
+    ' 👉 Para iniciar sesión nuevamente, utiliza',
+    'el comando /start',
+  ];
+  ctx.replyWithMarkdownV2(ParseMarkdown(messages.join('\n')));
 });
+PasswordScene.on('message', InterruptLogin);
