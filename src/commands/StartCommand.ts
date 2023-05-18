@@ -1,6 +1,6 @@
 import { Log, ParseMarkdown } from '@/utils';
 import { Context, Markup } from 'telegraf';
-import { User } from '@/typegram';
+import { User } from 'telegraf/typings/core/types/typegram';
 
 export const StartCommand = (context: Context): void => {
   const { username, id } = context.from as User;
