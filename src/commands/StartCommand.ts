@@ -4,7 +4,7 @@ import { User } from '@/typegram';
 
 export const StartCommand = (context: Context): void => {
   const { username, id } = context.from as User;
-  Log(`User ${username} (${id}) started the bot!`);
+  Log(`User @${username} (${id}) started the bot!`);
   const message = [
     `👋 Hola @${username}!`,
     '',
