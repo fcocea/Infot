@@ -34,7 +34,6 @@ export const loadUser = async (
   username?: string;
   token?: string;
 }> => {
-  // extract data from firestore
   const docRef = doc(db, 'users', userID.toString());
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {

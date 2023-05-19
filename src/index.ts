@@ -1,6 +1,6 @@
 import { Telegraf, session, Scenes } from 'telegraf';
 import { Config, Log } from '@/utils';
-import { StartCommand } from '@/commands';
+import { StartCommand, MatriculaCommand } from '@/commands';
 import { LoginScene, PasswordScene } from '@/middlewares';
 
 const { BotToken } = Config;
@@ -15,6 +15,7 @@ bot.use(session());
 bot.use(stage.middleware());
 
 bot.start(StartCommand);
+bot.command('matricula', MatriculaCommand);
 bot.action('start_login', (ctx) => {
   ctx.scene.enter('usernameLogin');
 });

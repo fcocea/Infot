@@ -1,7 +1,7 @@
 import { Context, Markup, Scenes } from 'telegraf';
 import { Log, ParseMarkdown } from '@/utils';
 import { message } from 'telegraf/filters';
-import { UdecInfoda } from '@/services';
+import { UdecInfoda, storeUser } from '@/services';
 
 export const LoginScene = new Scenes.BaseScene<Scenes.SceneContext>(
   'usernameLogin',
@@ -113,7 +113,7 @@ PasswordScene.on(message('reply_to_message'), async (ctx) => {
       `🕵️‍♂️ Un momento! me encuentro *verificando* \ntus credenciales...`,
     ),
   );
-  const login = await udecAcces.login();
+  const { login, token } = await udecAcces.login();
   const succesMessage = [
     ` 👋 Ingreaste correctamente como: *${username}*`,
     '',
@@ -139,6 +139,12 @@ PasswordScene.on(message('reply_to_message'), async (ctx) => {
     ParseMarkdown((login ? succesMessage : errorMessage).join('\n')),
     { parse_mode: 'MarkdownV2' },
   );
+  if (login) {
+    await storeUser(ctx.from.id, {
+      username,
+      token: token as string,
+    });
+  }
   Log(
     `User ${username} (@${ctx.from.username}) has ${
       login ? 'logged in successfully' : 'failed to login'

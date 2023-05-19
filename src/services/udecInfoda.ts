@@ -9,6 +9,7 @@ type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
 type RequireTwoProperties<T, Prop1 extends keyof T, Prop2 extends keyof T> =
   | RequireProperty<T, Prop1>
   | RequireProperty<T, Prop2>;
+
 interface UdecProps {
   username: string;
   password?: string;
@@ -55,7 +56,10 @@ export class UdecInfoda {
     this.succesAuth = false;
   }
 
-  public async login(): Promise<boolean> {
+  public async login(): Promise<{
+    login: boolean;
+    token: string | undefined;
+  }> {
     if (this.formData) {
       const encoder = new FormDataEncoder(this.formData);
       const loginRes = await got.post('https://alumnos.udec.cl/', {
@@ -73,12 +77,19 @@ export class UdecInfoda {
       const infodaUrl = $('a')
         .filter((i, el) => $(el).text() === 'INFODA')
         .attr('href');
-      if (infodaUrl === undefined) return false;
+      if (infodaUrl === undefined)
+        return {
+          login: false,
+          token: undefined,
+        };
       this.cookies = loginRes.headers['set-cookie'] || [];
       this.infodaUrl = infodaUrl;
     }
     const login = await this.accesInfoda();
-    return login;
+    return {
+      login: login,
+      token: this.infodaUrl.split('=')[1],
+    };
   }
 
   private async accesInfoda(): Promise<boolean> {
