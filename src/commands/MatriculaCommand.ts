@@ -1,5 +1,7 @@
-import { UdecInfoda, loadUser } from '@/services';
 import { Log, ParseMarkdown } from '@/utils';
+
+import { UdecInfoda, loadUser } from '@/services';
+
 import { Context } from 'telegraf';
 import { Chat, User } from 'telegraf/typings/core/types/typegram';
 

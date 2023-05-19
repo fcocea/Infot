@@ -1,6 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc, doc, getDoc } from 'firebase/firestore';
 import { Config, Log } from '@/utils';
+
+import { initializeApp } from 'firebase/app';
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 
 const { FireStore } = Config;
 

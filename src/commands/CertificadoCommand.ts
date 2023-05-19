@@ -1,5 +1,7 @@
-import { loadUser } from '@/services';
 import { ParseMarkdown } from '@/utils';
+
+import { loadUser } from '@/services';
+
 import { Scenes } from 'telegraf';
 import { User } from 'telegraf/typings/core/types/typegram';
 

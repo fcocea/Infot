@@ -1,7 +1,10 @@
-import { Telegraf, session, Scenes } from 'telegraf';
+import { CertificadoCommand, MatriculaCommand, StartCommand } from '@/commands';
+
+import { CertificateScene, LoginScene, PasswordScene } from '@/middlewares';
+
 import { Config, Log } from '@/utils';
-import { StartCommand, MatriculaCommand, CertificadoCommand } from '@/commands';
-import { LoginScene, PasswordScene, CertificateScene } from '@/middlewares';
+
+import { Scenes, Telegraf, session } from 'telegraf';
 import { Message } from 'telegraf/typings/core/types/typegram';
 
 const { BotToken } = Config;

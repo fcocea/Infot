@@ -8,8 +8,8 @@
     "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "node --experimental-specifier-resolution=node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "devScript": "tsx watch src/services/udecInfoda.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --fix . && prettier --write ."
   },
   "author": "Francisco Cea <hola@fcocea.dev>",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "telegraf": "^4.12.2"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^20.1.7",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",

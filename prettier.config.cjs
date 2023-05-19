@@ -5,4 +5,18 @@ module.exports = {
   singleQuote: true,
   semi: true,
   bracketSpacing: true,
+  importOrder: [
+    '^@/commands',
+    '^@/commands/(.*)$',
+    '^@/middlewares',
+    '^@/middlewares/(.*)$',
+    '^@/utils',
+    '^@/utils/(.*)$',
+    '^@/services',
+    '^@/services/(.*)$',
+    '<THIRD_PARTY_MODULES>',
+  ],
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 };

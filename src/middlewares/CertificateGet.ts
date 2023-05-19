@@ -1,8 +1,10 @@
-import { UdecInfoda, loadUser } from '@/services';
 import { Log, ParseMarkdown } from '@/utils';
+
+import { UdecInfoda, loadUser } from '@/services';
+
+import fs from 'fs';
 import { Scenes } from 'telegraf';
 import { Message } from 'telegraf/typings/core/types/typegram';
-import fs from 'fs';
 
 interface Certificate {
   id: number;
@@ -40,11 +42,6 @@ CertificateScene.enter(async (context) => {
     context.scene.leave();
     return;
   }
-  // if (!username || !token) {
-  //   Log('User not found! (CertificateScene) | Firestore', 'error');
-  //   context.scene.leave();
-  //   return;
-  // }
   const messages = [
     `  👋 Hey! @${userTg}, selecciona un certificado de`,
     'alumno regular, dependiendo de tu *finalidad*.',

@@ -1,7 +1,9 @@
 import { Log, ParseMarkdown } from '@/utils';
+
+import { loadUser } from '@/services';
+
 import { Context, Markup } from 'telegraf';
 import { User } from 'telegraf/typings/core/types/typegram';
-import { loadUser } from '@/services';
 
 export const StartCommand = async (context: Context): Promise<void> => {
   const { username: userTg, id } = context.from as User;

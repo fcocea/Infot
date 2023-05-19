@@ -1,7 +1,9 @@
-import { Context, Markup, Scenes } from 'telegraf';
 import { Log, ParseMarkdown } from '@/utils';
-import { message } from 'telegraf/filters';
+
 import { UdecInfoda, storeUser } from '@/services';
+
+import { Context, Markup, Scenes } from 'telegraf';
+import { message } from 'telegraf/filters';
 
 export const LoginScene = new Scenes.BaseScene<Scenes.SceneContext>(
   'usernameLogin',

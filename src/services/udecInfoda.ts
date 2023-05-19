@@ -1,9 +1,10 @@
-import got, { HTTPError } from 'got';
+import { Log } from '@/utils';
+
 import * as cheerio from 'cheerio';
 import { FormDataEncoder } from 'form-data-encoder';
 import { FormData } from 'formdata-node';
-import { Log } from '@/utils/general';
 import fs from 'fs';
+import got, { HTTPError } from 'got';
 
 type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
 type RequireTwoProperties<T, Prop1 extends keyof T, Prop2 extends keyof T> =
