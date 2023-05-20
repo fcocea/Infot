@@ -1,18 +1,8 @@
+import { ConfigProps } from '@/types';
+
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-
-interface ConfigProps {
-  BotToken: string;
-  FireStore: {
-    apiKey: string;
-    authDomain: string;
-    projectId: string;
-    storageBucket: string;
-    messagingSenderId: string;
-    appId: string;
-  };
-}
 
 export const Config: ConfigProps = {
   BotToken: process.env.BOT_TOKEN as string,

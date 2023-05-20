@@ -1,9 +1,15 @@
 import { CertificadoCommand, MatriculaCommand, StartCommand } from '@/commands';
 
-import { CertificateScene, LoginScene, PasswordScene } from '@/middlewares';
+import {
+  CertificateScene,
+  CronCheck,
+  LoginScene,
+  PasswordScene,
+} from '@/middlewares';
 
 import { Config, Log } from '@/utils';
 
+import cron from 'node-cron';
 import { Scenes, Telegraf, session } from 'telegraf';
 import { Message } from 'telegraf/typings/core/types/typegram';
 
@@ -22,9 +28,7 @@ bot.use(stage.middleware());
 bot.start(StartCommand);
 bot.command('matricula', MatriculaCommand);
 bot.command('certificado', CertificadoCommand);
-bot.action('start_login', (ctx) => {
-  ctx.scene.enter('usernameLogin');
-});
+bot.action('start_login', (ctx) => ctx.scene.enter('usernameLogin'));
 bot.on('callback_query', async (ctx) => {
   if (!('data' in ctx.callbackQuery)) return;
   if (!ctx.callbackQuery.data) return;
@@ -44,6 +48,8 @@ bot.on('callback_query', async (ctx) => {
 });
 bot.launch();
 Log('The bot has been started successfully!!');
+
+cron.schedule('*/5 * * * *', () => CronCheck(bot.telegram));
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));

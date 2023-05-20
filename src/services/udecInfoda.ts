@@ -1,21 +1,17 @@
 import { Log } from '@/utils';
 
+import {
+  Grades,
+  GradesResponse,
+  RequireTwoProperties,
+  UdecProps,
+} from '@/types';
+
 import * as cheerio from 'cheerio';
 import { FormDataEncoder } from 'form-data-encoder';
 import { FormData } from 'formdata-node';
 import fs from 'fs';
 import got, { HTTPError } from 'got';
-
-type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
-type RequireTwoProperties<T, Prop1 extends keyof T, Prop2 extends keyof T> =
-  | RequireProperty<T, Prop1>
-  | RequireProperty<T, Prop2>;
-
-interface UdecProps {
-  username: string;
-  password?: string;
-  token?: string;
-}
 
 class UdecInfodaError extends Error {
   constructor(message: string) {
@@ -176,5 +172,34 @@ export class UdecInfoda {
       return undefined;
     }
     return filename;
+  }
+
+  async getGrades(): Promise<Grades[]> {
+    const url = 'http://app4.udec.cl/infoda2/calificaciones.json';
+    try {
+      const response = await got.get(url, {
+        headers: {
+          cookie: this.cookies,
+        },
+      });
+      const data = JSON.parse(response.body) as GradesResponse[];
+      return data.map((mark: Grades) => ({
+        codigoAsignatura: mark.codigoAsignatura,
+        nombreAsignatura: mark.nombreAsignatura
+          .toLowerCase()
+          .replace(/(?:^|\s)\w/g, (letter) => letter.toUpperCase()),
+        fechaCreacion: mark.fechaCreacion,
+        nota: mark.nota,
+        nombre: mark.nombre,
+        descripcion: mark.descripcion,
+      }));
+    } catch (error) {
+      if (error instanceof HTTPError) {
+        Log(
+          `Error ${error.response.statusCode} - ${error.response.statusMessage} | ${this.user} | Grades`,
+        );
+      }
+      return [];
+    }
   }
 }

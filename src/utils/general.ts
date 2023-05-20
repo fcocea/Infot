@@ -10,3 +10,28 @@ export const ParseMarkdown = (text: string): string => {
   const reservedCharactersMarkdown = /[\\`{}#+\-.!]/g;
   return text.replace(reservedCharactersMarkdown, '\\$&');
 };
+
+export const areObjectsEqual = <
+  T extends {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: any;
+  },
+>(
+  obj1: T,
+  obj2: T,
+) => {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (const key of keys1) {
+    if (obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+
+  return true;
+};

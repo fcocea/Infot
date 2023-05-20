@@ -14,6 +14,7 @@ module.exports = {
     '^@/utils/(.*)$',
     '^@/services',
     '^@/services/(.*)$',
+    '^@/types',
     '<THIRD_PARTY_MODULES>',
   ],
   plugins: ['@trivago/prettier-plugin-sort-imports'],

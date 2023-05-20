@@ -1,7 +1,18 @@
-import { Config, Log } from '@/utils';
+import { Config, Log, areObjectsEqual } from '@/utils';
+
+import { Grades, User } from '@/types';
 
 import { initializeApp } from 'firebase/app';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 
 const { FireStore } = Config;
 
@@ -45,4 +56,63 @@ export const loadUser = async (
     };
   }
   return {};
+};
+
+export const getUsers = async (): Promise<User[]> => {
+  try {
+    const querySnapshot = await getDocs(collection(db, 'users'));
+    return querySnapshot.docs.map((data) => data.data() as User);
+  } catch (e) {
+    Log('Error getting users from FireStore', 'error');
+    return [];
+  }
+};
+
+export const uploadGrades = async (
+  userID: number,
+  marks: Grades[],
+): Promise<Omit<Grades, 'codigoAsignatura'>[]> => {
+  const unnotifiedGrades: Omit<Grades, 'codigoAsignatura'>[] = [];
+  for (const mark of marks) {
+    const { codigoAsignatura, nombreAsignatura, ...partial } = mark;
+    const partialMark = partial as Omit<
+      Grades,
+      'codigoAsignatura' | 'nombreAsignatura'
+    >;
+    const documentRef = doc(
+      collection(db, `users/${userID}/subjects`),
+      codigoAsignatura,
+    );
+    const documentSnapshot = await getDoc(documentRef);
+    const notas = documentSnapshot.get('notas') as
+      | Omit<Grades, 'codigoAsignatura' | 'nombreAsignatura'>[]
+      | undefined;
+
+    if (!notas) {
+      await setDoc(documentRef, {
+        codigoAsignatura,
+        nombreAsignatura,
+        notas: [partialMark],
+      });
+      unnotifiedGrades.push({
+        ...partialMark,
+        nombreAsignatura,
+      } as Omit<Grades, 'codigoAsignatura'>);
+      continue;
+    }
+    const exists = notas.some(
+      (nota: Omit<Grades, 'codigoAsignatura' | 'nombreAsignatura'>) =>
+        areObjectsEqual(nota, partialMark),
+    );
+    if (!exists) {
+      await updateDoc(documentRef, {
+        notas: arrayUnion(partialMark),
+      });
+      unnotifiedGrades.push({
+        ...partialMark,
+        nombreAsignatura,
+      } as Omit<Grades, 'codigoAsignatura'>);
+    }
+  }
+  return unnotifiedGrades;
 };

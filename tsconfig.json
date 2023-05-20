@@ -11,7 +11,8 @@
       "@/middlewares": ["src/middlewares"],
       "@/middlewares/*": ["src/middlewares/*"],
       "@/services": ["src/services"],
-      "@/services/*": ["src/services/*"]
+      "@/services/*": ["src/services/*"],
+      "@/types": ["src/types"]
     },
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
