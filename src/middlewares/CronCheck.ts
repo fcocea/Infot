@@ -43,7 +43,9 @@ export const CronCheck = async (tg: Telegram) => {
         continue;
       }
     }
-    Log(`Checked ${fullChecked}/${users.length} users!`);
+    Log(
+      `${fullChecked} users out of ${users.length} got updates on their platform`,
+    );
   } catch (e) {
     Log('Failed to check users!', 'error');
   }
