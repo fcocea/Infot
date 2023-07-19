@@ -102,7 +102,12 @@ export const uploadGrades = async (
     }
     const exists = notas.some(
       (nota: Omit<Grades, 'codigoAsignatura' | 'nombreAsignatura'>) =>
-        areObjectsEqual(nota, partialMark),
+        areObjectsEqual(nota, partialMark) ||
+        (nota.nombre == 'NOTAFINAL' &&
+          areObjectsEqual(
+            { ...nota, fechaCreacion: undefined },
+            { ...partialMark, fechaCreacion: undefined },
+          )),
     );
     if (!exists) {
       await updateDoc(documentRef, {
