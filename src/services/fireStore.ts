@@ -103,7 +103,8 @@ export const uploadGrades = async (
     const exists = notas.some(
       (nota: Omit<Grades, 'codigoAsignatura' | 'nombreAsignatura'>) =>
         areObjectsEqual(nota, partialMark) ||
-        (nota.nombre == 'NOTAFINAL' &&
+        (nota.nombre === 'NOTAFINAL' &&
+          partialMark.nombre === 'NOTAFINAL' &&
           areObjectsEqual(
             { ...nota, fechaCreacion: undefined },
             { ...partialMark, fechaCreacion: undefined },
